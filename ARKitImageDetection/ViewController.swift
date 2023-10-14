@@ -8,6 +8,9 @@ Main view controller for the AR experience.
 import ARKit
 import SceneKit
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
+
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
@@ -30,7 +33,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     // MARK: - View Controller Life Cycle
-    
+    var db: Firestore!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,6 +44,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         statusViewController.restartExperienceHandler = { [unowned self] in
             self.restartExperience()
         }
+        db = Firestore.firestore()
     }
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -67,16 +71,49 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     /// Creates a new AR configuration to run on the `session`.
     /// - Tag: ARReferenceImage-Loading
 	func resetTracking() {
-        
-        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
-            fatalError("Missing expected asset catalog resources.")
-        }
+        //old code to get referenceimages from assets
+//        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
+//            fatalError("Missing expected asset catalog resources.")
+//        }
         
         let configuration = ARWorldTrackingConfiguration()
-        configuration.detectionImages = referenceImages
-        session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        db.collection("Images").getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("ERROR getting documents: \(err)")
+            } else {
+                DispatchQueue.global().async {
+                    var imagesSet: [ARReferenceImage] = []
+                    for document in querySnapshot!.documents {
+                        print("\(document.documentID) => \(document.data())")
+                        print(document.data()["URL"]!)
+                        let urlstring: String = document.data()["URL"]! as! String
+                        let theURL = URL(string: urlstring)
+                        do {
+                            let imageData = try Data(contentsOf: theURL!)
+                            let image = UIImage(data: imageData)
+                            print("image loaded")
+                            var cgFloat: CGFloat?
+                            if let doubleValue = Double(document.data()["width"] as! String) {
+                                cgFloat = CGFloat(doubleValue)
+                            }
+                            let referenceImage = ARReferenceImage((image?.cgImage)!, orientation: .up, physicalWidth: cgFloat!)
+                            referenceImage.name = document.data()["name"] as? String
+                            imagesSet.append(referenceImage)
+                        } catch {
+                            print("ERROR")
+                        }
+                    }
+                    configuration.detectionImages = Set(imagesSet)
+                    self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                    self.statusViewController.scheduleMessage("Look around to detect images", inSeconds: 7.5, messageType: .contentPlacement)
+                }
+            }
+        }
+        
+        //former code to get images from assets, not needed.
+//        configuration.detectionImages = referenceImages
 
-        statusViewController.scheduleMessage("Look around to detect images", inSeconds: 7.5, messageType: .contentPlacement)
 	}
 
     // MARK: - ARSCNViewDelegate (Image detection results)
