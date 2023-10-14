@@ -18,6 +18,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet weak var blurView: UIVisualEffectView!
     
+    @IBOutlet weak var buildingButton: UIButton!
+    @IBOutlet weak var dots: UIImageView!
+    
+    
+    
     /// The view controller that displays the status and "restart experience" UI.
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
@@ -39,7 +44,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         sceneView.delegate = self
         sceneView.session.delegate = self
-
+        
+        buildingButton.isHidden = true
+        dots.isHidden = true
         // Hook up status view controller callback(s).
         statusViewController.restartExperienceHandler = { [unowned self] in
             self.restartExperience()
@@ -150,6 +157,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let imageName = referenceImage.name ?? ""
             self.statusViewController.cancelAllScheduledMessages()
             self.statusViewController.showMessage("Detected image “\(imageName)”")
+            self.buttonAppear()
         }
     }
 
@@ -162,5 +170,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             .fadeOut(duration: 0.5),
             .removeFromParentNode()
         ])
+    }
+    
+    func buttonAppear() {
+        buildingButton.isHidden = false
+        buildingButton.layer.cornerRadius = buildingButton.frame.size.height / 2
+        buildingButton.clipsToBounds = true
+        dots.isHidden = false
+
     }
 }
