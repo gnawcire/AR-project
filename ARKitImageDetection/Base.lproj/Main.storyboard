@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,9 +24,9 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ac7-7y-dTM">
-                                            <rect key="frame" x="0.0" y="0.0" width="125" height="31.666666666666668"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="125" height="31.333333333333332"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="d6V-vA-DSm">
-                                                <rect key="frame" x="0.0" y="0.0" width="125" height="31.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="125" height="31.333333333333332"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" text="Tracking status" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x6b-bh-aZK" userLabel="Messages label">
@@ -109,12 +110,12 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" wantsMultisampling="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E6c-py-dvH" customClass="ARSCNView">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="834"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                             </sceneKitView>
                             <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R5W-V8-6lY">
-                                <rect key="frame" x="0.0" y="140" width="390" height="704"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="AjQ-5W-To9">
-                                    <rect key="frame" x="0.0" y="0.0" width="390" height="704"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="light"/>
@@ -129,10 +130,10 @@
                                 </connections>
                             </containerView>
                             <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UCO-Dt-ddo">
-                                <rect key="frame" x="0.0" y="543" width="390" height="291"/>
+                                <rect key="frame" x="0.0" y="634" width="390" height="210"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hG1-04-3xR">
-                                        <rect key="frame" x="0.0" y="203" width="390" height="90"/>
+                                        <rect key="frame" x="0.0" y="120" width="390" height="90"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="90" id="qCC-Qq-maD"/>
                                         </constraints>
@@ -155,23 +156,35 @@
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="b36-Ws-HWZ">
                                         <rect key="frame" x="163" y="99" width="64" height="57"/>
                                     </activityIndicatorView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0ds-Tq-PrL">
+                                        <rect key="frame" x="25" y="36" width="340" height="120"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="0ds-Tq-PrL" secondAttribute="trailing" constant="25" id="2xo-t4-wtO"/>
                                     <constraint firstAttribute="trailing" secondItem="hG1-04-3xR" secondAttribute="trailing" id="59Y-th-VV3"/>
                                     <constraint firstItem="4ww-6g-RpY" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" constant="25" id="ILA-As-G4v"/>
                                     <constraint firstAttribute="trailing" secondItem="4ww-6g-RpY" secondAttribute="trailing" constant="25" id="LrK-Qa-Lvu"/>
+                                    <constraint firstAttribute="bottom" secondItem="0ds-Tq-PrL" secondAttribute="bottom" constant="50" id="MZl-5Q-Jnc"/>
                                     <constraint firstAttribute="bottom" secondItem="4ww-6g-RpY" secondAttribute="bottom" id="Mfz-xh-lz7"/>
                                     <constraint firstAttribute="bottom" secondItem="hG1-04-3xR" secondAttribute="bottom" id="R4E-PL-A2h"/>
                                     <constraint firstAttribute="trailing" secondItem="b36-Ws-HWZ" secondAttribute="trailing" constant="163" id="RLg-3L-8cw"/>
                                     <constraint firstItem="b36-Ws-HWZ" firstAttribute="centerX" secondItem="UCO-Dt-ddo" secondAttribute="centerX" id="Yhj-XF-Hdg"/>
+                                    <constraint firstItem="0ds-Tq-PrL" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" constant="25" id="gL5-hz-b0r"/>
                                     <constraint firstItem="b36-Ws-HWZ" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" constant="163" id="jRI-Q1-HNI"/>
+                                    <constraint firstItem="0ds-Tq-PrL" firstAttribute="top" secondItem="UCO-Dt-ddo" secondAttribute="top" constant="55" id="oRm-Nn-XJ5"/>
                                     <constraint firstItem="4ww-6g-RpY" firstAttribute="top" secondItem="UCO-Dt-ddo" secondAttribute="top" constant="213.33333333333337" id="ubL-aE-DLC"/>
                                     <constraint firstItem="hG1-04-3xR" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" id="zHz-LJ-nV4"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sRa-ND-4RN">
-                                <rect key="frame" x="285" y="65" width="55" height="35"/>
+                                <rect key="frame" x="305" y="109" width="55" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" red="0.79661997259999995" green="0.79661997259999995" blue="0.79661997259999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
@@ -207,11 +220,14 @@
                         <outlet property="blurView" destination="R5W-V8-6lY" id="oF2-lD-Srf"/>
                         <outlet property="bottomConstraint" destination="R4E-PL-A2h" id="oAt-9O-k3s"/>
                         <outlet property="bottomConstraintForText" destination="Mfz-xh-lz7" id="RzU-XN-u7x"/>
+                        <outlet property="bottomScrollableConstraint" destination="MZl-5Q-Jnc" id="Vko-hC-MHe"/>
                         <outlet property="buildingButton" destination="hG1-04-3xR" id="8op-Cm-pGt"/>
                         <outlet property="buildingInfoView" destination="UCO-Dt-ddo" id="gxc-52-aM5"/>
                         <outlet property="descriptionText" destination="4ww-6g-RpY" id="nP1-dY-cmN"/>
+                        <outlet property="descriptionTextScrollable" destination="0ds-Tq-PrL" id="ybt-Nf-V3d"/>
                         <outlet property="sceneView" destination="E6c-py-dvH" id="Gr4-Uw-Z4A"/>
                         <outlet property="topConstraintText" destination="ubL-aE-DLC" id="XJr-41-Ib7"/>
+                        <outlet property="topScrollableConstraint" destination="oRm-Nn-XJ5" id="KbV-rp-QJC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
@@ -317,5 +333,8 @@
         <image name="WashuLogo" width="1240" height="1240"/>
         <image name="restart" width="20" height="20"/>
         <image name="restartPressed" width="20" height="20"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

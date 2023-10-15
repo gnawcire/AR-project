@@ -15,12 +15,14 @@ import FirebaseStorage
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
+    @IBOutlet weak var descriptionTextScrollable: UITextView!
     @IBOutlet var sceneView: ARSCNView!
     
     @IBOutlet weak var blurView: UIVisualEffectView!
     
     @IBOutlet weak var buildingButton: UIButton!
     
+    @IBOutlet weak var bottomScrollableConstraint: NSLayoutConstraint!
     
     
     /// The view controller that displays the status and "restart experience" UI.
@@ -51,8 +53,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.restartExperience()
         }
         db = Firestore.firestore()
-        
-            
+        descriptionTextScrollable.text = ""
+        descriptionTextScrollable.font = UIFont(name: "Kefa-Regular", size: 18)
         
     }
 
@@ -179,7 +181,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 self.descriptionOfCur = value
                 if self.expanded {
                     UIView.animate(withDuration: 0.5) {
-                        self.descriptionText.text = self.descriptionOfCur
+//                        self.descriptionText.text = self.descriptionOfCur
+                        self.descriptionTextScrollable.text = self.descriptionOfCur
                     }
                 }
                 self.nameOfCur = imageName
@@ -197,7 +200,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                                 self.nameOfCur = imageName
                                 if self.expanded {
                                     UIView.animate(withDuration: 0.5) {
-                                        self.descriptionText.text = self.descriptionOfCur
+//                                        self.descriptionText.text = self.descriptionOfCur
+                                        self.descriptionTextScrollable.text = self.descriptionOfCur
                                     }
                                 }
                                 self.buildingButton.setTitle(imageName, for: .normal)
@@ -240,12 +244,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var descriptionText: UILabel!
     @IBOutlet weak var topConstraintText: NSLayoutConstraint!
     @IBOutlet weak var topConstraintForText: NSLayoutConstraint!
+    @IBOutlet weak var topScrollableConstraint: NSLayoutConstraint!
     @IBAction func expandBuilding(_ sender: Any) {
         if expanded{
             bottomConstraint.constant = 0
+            
             UIView.animate(withDuration: 0.5) {
                 self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 0)
-                self.descriptionText.text = ""
+//                self.descriptionText.text = ""
+                self.descriptionTextScrollable.text = ""
                 self.view.layoutIfNeeded()
             }
             expanded = false
@@ -253,12 +260,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         expanded = true
         bottomConstraint.constant = 220
-        bottomConstraintForText.constant = 50
-        topConstraintText.constant = 50
+        
+
+//        bottomConstraintForText.constant = 50
+//        topConstraintText.constant = 50
         UIView.animate(withDuration: 0.5) {
             self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1)
-            self.descriptionText.text = self.descriptionOfCur
-            self.descriptionText.textColor = .black
+//            self.descriptionText.text = self.descriptionOfCur
+            self.descriptionTextScrollable.text = self.descriptionOfCur
+            self.descriptionTextScrollable.textColor = .black
+//            self.descriptionText.textColor = .black
             self.view.layoutIfNeeded()
         }
         
