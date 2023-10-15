@@ -252,7 +252,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
         expanded = true
-        bottomConstraint.constant = 240
+        bottomConstraint.constant = 220
         bottomConstraintForText.constant = 50
         topConstraintText.constant = 50
         UIView.animate(withDuration: 0.5) {
