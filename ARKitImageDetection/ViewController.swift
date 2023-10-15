@@ -75,7 +75,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     /// Creates a new AR configuration to run on the `session`.
     /// - Tag: ARReferenceImage-Loading
-	func resetTracking() {
+    var descriptionOfCur: String = ""
+    var nameOfCur: String = ""
+    func resetTracking() {
         //old code to get referenceimages from assets
 //        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
 //            fatalError("Missing expected asset catalog resources.")
@@ -126,6 +128,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - ARSCNViewDelegate (Image detection results)
     /// - Tag: ARImageAnchor-Visualizing
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        sceneView.session.remove(anchor: anchor)
         guard let imageAnchor = anchor as? ARImageAnchor else { return }
         let referenceImage = imageAnchor.referenceImage
         updateQueue.async {
@@ -157,6 +160,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let imageName = referenceImage.name ?? ""
             self.statusViewController.cancelAllScheduledMessages()
             self.statusViewController.showMessage("Detected image “\(imageName)”")
+            self.db.collection("ImageDescriptions").getDocuments() {(querySnapshot, err) in
+                if let err = err {
+                    print("ERROR: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        if document.data()["name"] as! String == imageName{
+                            self.descriptionOfCur = document.data()["description"] as! String
+                            self.nameOfCur = imageName
+                            self.buildingButton.setTitle(imageName, for: .normal)
+                            self.buildingButton.titleLabel?.font = UIFont(name: "Kefa-Regular", size: 30)
+
+
+                        }
+                    }
+                }
+            }
             self.buttonAppear()
         }
     }
@@ -182,11 +201,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var buildingInfoView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var expanded: Bool = false
+    
+    @IBOutlet weak var bottomConstraintForText: NSLayoutConstraint!
+    @IBOutlet weak var descriptionText: UILabel!
+    @IBOutlet weak var topConstraintText: NSLayoutConstraint!
+    @IBOutlet weak var topConstraintForText: NSLayoutConstraint!
     @IBAction func expandBuilding(_ sender: Any) {
         if expanded{
             bottomConstraint.constant = 0
             UIView.animate(withDuration: 0.5) {
                 self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 0)
+                self.descriptionText.text = ""
                 self.view.layoutIfNeeded()
             }
             expanded = false
@@ -194,9 +219,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         expanded = true
         bottomConstraint.constant = 240
-        
+        bottomConstraintForText.constant = 50
+        topConstraintText.constant = 50
         UIView.animate(withDuration: 0.5) {
             self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1)
+            self.descriptionText.text = self.descriptionOfCur
+            self.descriptionText.textColor = .black
             self.view.layoutIfNeeded()
         }
         
