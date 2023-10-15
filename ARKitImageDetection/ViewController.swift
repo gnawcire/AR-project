@@ -181,7 +181,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet weak var buildingInfoView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    var expanded: Bool = false
     @IBAction func expandBuilding(_ sender: Any) {
+        if expanded{
+            bottomConstraint.constant = 0
+            UIView.animate(withDuration: 0.5) {
+                self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 0)
+                self.view.layoutIfNeeded()
+            }
+            expanded = false
+            return
+        }
+        expanded = true
         bottomConstraint.constant = 240
         
         UIView.animate(withDuration: 0.5) {
