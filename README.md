@@ -1,5 +1,7 @@
 # ARound WashU - Augmented Reality Proof of Concept
 
+![Demo of App Gif](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmI0MGx1aXJ4NWUyMHA5eGFvZzZlNmFvZ245eW42N2lvdG53N3E3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WvSkgMx9tpkQZRXW3J/giphy.gif)
+
 ARound WashU is a self-guided tour app that utilizes augmented reality to give users information on WashU's buildings and facilities. Simply aim your phone camera at a building and ARound WashU will return a brief description of the building.
 
 ## Features
