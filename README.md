@@ -14,6 +14,7 @@ ARound WashU is a self-guided tour app that utilizes augmented reality to give u
     * Takes a screen capture of current Augmented Reality view
     * Prompts user for name and description
 * Store location information in database to be accessible for all users
+* App iconography and UI looks cool :)
 
 
 ## Testing
