@@ -152,6 +152,9 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="b36-Ws-HWZ">
+                                        <rect key="frame" x="163" y="99" width="64" height="57"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -160,10 +163,23 @@
                                     <constraint firstAttribute="trailing" secondItem="4ww-6g-RpY" secondAttribute="trailing" constant="25" id="LrK-Qa-Lvu"/>
                                     <constraint firstAttribute="bottom" secondItem="4ww-6g-RpY" secondAttribute="bottom" id="Mfz-xh-lz7"/>
                                     <constraint firstAttribute="bottom" secondItem="hG1-04-3xR" secondAttribute="bottom" id="R4E-PL-A2h"/>
+                                    <constraint firstAttribute="trailing" secondItem="b36-Ws-HWZ" secondAttribute="trailing" constant="163" id="RLg-3L-8cw"/>
+                                    <constraint firstItem="b36-Ws-HWZ" firstAttribute="centerX" secondItem="UCO-Dt-ddo" secondAttribute="centerX" id="Yhj-XF-Hdg"/>
+                                    <constraint firstItem="b36-Ws-HWZ" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" constant="163" id="jRI-Q1-HNI"/>
                                     <constraint firstItem="4ww-6g-RpY" firstAttribute="top" secondItem="UCO-Dt-ddo" secondAttribute="top" constant="213.33333333333337" id="ubL-aE-DLC"/>
                                     <constraint firstItem="hG1-04-3xR" firstAttribute="leading" secondItem="UCO-Dt-ddo" secondAttribute="leading" id="zHz-LJ-nV4"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sRa-ND-4RN">
+                                <rect key="frame" x="285" y="65" width="55" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.79661997259999995" green="0.79661997259999995" blue="0.79661997259999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Add"/>
+                                <connections>
+                                    <action selector="addButton:" destination="BV1-FR-VrT" eventType="touchUpInside" id="uVY-H5-JXU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="GBj-4O-Whc"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -187,6 +203,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="C6Z-Ag-7XT"/>
                     <connections>
+                        <outlet property="activityProgress" destination="b36-Ws-HWZ" id="vM8-oi-Dtl"/>
                         <outlet property="blurView" destination="R5W-V8-6lY" id="oF2-lD-Srf"/>
                         <outlet property="bottomConstraint" destination="R4E-PL-A2h" id="oAt-9O-k3s"/>
                         <outlet property="bottomConstraintForText" destination="Mfz-xh-lz7" id="RzU-XN-u7x"/>

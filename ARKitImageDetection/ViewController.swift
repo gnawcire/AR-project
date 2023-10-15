@@ -10,6 +10,7 @@ import SceneKit
 import UIKit
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseStorage
 
 
 class ViewController: UIViewController, ARSCNViewDelegate {
@@ -50,6 +51,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.restartExperience()
         }
         db = Firestore.firestore()
+        
+            
+        
     }
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -77,21 +81,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     /// - Tag: ARReferenceImage-Loading
     var descriptionOfCur: String = ""
     var nameOfCur: String = ""
+    var imagesSet: [ARReferenceImage] = []
+    let configuration = ARWorldTrackingConfiguration()
+    
+    @IBOutlet weak var activityProgress: UIActivityIndicatorView!
+    var done = false
     func resetTracking() {
         //old code to get referenceimages from assets
 //        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
 //            fatalError("Missing expected asset catalog resources.")
 //        }
         
-        let configuration = ARWorldTrackingConfiguration()
-        
+        activityProgress.startAnimating()
         db.collection("Images").getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("ERROR getting documents: \(err)")
             } else {
                 DispatchQueue.global().async {
-                    if configuration.detectionImages.isEmpty {
-                        var imagesSet: [ARReferenceImage] = []
+                    if self.configuration.detectionImages.isEmpty {
                         for document in querySnapshot!.documents {
                             print("\(document.documentID) => \(document.data())")
                             print(document.data()["URL"]!)
@@ -107,17 +114,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                                 }
                                 let referenceImage = ARReferenceImage((image?.cgImage)!, orientation: .up, physicalWidth: cgFloat!)
                                 referenceImage.name = document.data()["name"] as? String
-                                imagesSet.append(referenceImage)
+                                self.imagesSet.append(referenceImage)
                             } catch {
                                 print("ERROR")
                             }
+                            
                         }
-                        configuration.detectionImages = Set(imagesSet)
+                        
+                        self.configuration.detectionImages = Set(self.imagesSet)
                     }
-                    self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                    self.session.run(self.configuration, options: [.resetTracking, .removeExistingAnchors])
                     self.statusViewController.scheduleMessage("Look around to detect images", inSeconds: 7.5, messageType: .contentPlacement)
+                    self.done = true
                 }
+                
             }
+            while !self.done {
+                continue
+            }
+            self.activityProgress.stopAnimating()
         }
         
         //former code to get images from assets, not needed.
@@ -160,22 +175,41 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let imageName = referenceImage.name ?? ""
             self.statusViewController.cancelAllScheduledMessages()
             self.statusViewController.showMessage("Detected image “\(imageName)”")
-            self.db.collection("ImageDescriptions").getDocuments() {(querySnapshot, err) in
-                if let err = err {
-                    print("ERROR: \(err)")
-                } else {
-                    for document in querySnapshot!.documents {
-                        if document.data()["name"] as! String == imageName{
-                            self.descriptionOfCur = document.data()["description"] as! String
-                            self.nameOfCur = imageName
-                            self.buildingButton.setTitle(imageName, for: .normal)
-                            self.buildingButton.titleLabel?.font = UIFont(name: "Kefa-Regular", size: 30)
+            if let value = self.selfLandmark[imageName] {
+                self.descriptionOfCur = value
+                if self.expanded {
+                    UIView.animate(withDuration: 0.5) {
+                        self.descriptionText.text = self.descriptionOfCur
+                    }
+                }
+                self.nameOfCur = imageName
+                self.buildingButton.setTitle(imageName, for: .normal)
+                self.buildingButton.titleLabel?.font = UIFont(name: "Kefa-Regular", size: 30)
+                
+            } else {
+                self.db.collection("ImageDescriptions").getDocuments() {(querySnapshot, err) in
+                    if let err = err {
+                        print("ERROR: \(err)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            if document.data()["name"] as! String == imageName{
+                                self.descriptionOfCur = document.data()["description"] as! String
+                                self.nameOfCur = imageName
+                                if self.expanded {
+                                    UIView.animate(withDuration: 0.5) {
+                                        self.descriptionText.text = self.descriptionOfCur
+                                    }
+                                }
+                                self.buildingButton.setTitle(imageName, for: .normal)
+                                self.buildingButton.titleLabel?.font = UIFont(name: "Kefa-Regular", size: 30)
 
 
+                            }
                         }
                     }
                 }
             }
+            
             self.buttonAppear()
         }
     }
@@ -230,5 +264,57 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     @IBOutlet weak var buildingExpanded: UIView!
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    var selfLandmark = [String: String]()
+    @IBAction func addButton(_ sender: Any) {
+        print("PRESSED")
+        let screenShot: UIImage = sceneView.snapshot()
+        let referenceImage = ARReferenceImage((screenShot.cgImage)!, orientation: .up, physicalWidth: 1)
+        let alertController = UIAlertController(title: "Enter Details", message: "Please enter a name and description", preferredStyle: .alert)
+                
+                // Add text fields for name and description
+                alertController.addTextField { textField in
+                    textField.placeholder = "Name"
+                }
+                
+                alertController.addTextField { textField in
+                    textField.placeholder = "Description"
+                }
+                
+                // Create "OK" and "Cancel" actions
+                let okAction = UIAlertAction(title: "OK", style: .default) { [weak alertController] _ in
+                    guard let nameTextField = alertController?.textFields?.first,
+                          let descriptionTextField = alertController?.textFields?.last else {
+                        return
+                    }
+                    
+                    // Use the inputs from the text fields
+                    if let name = nameTextField.text, let description = descriptionTextField.text {
+                        print("Name: \(name)")
+                        print("Description: \(description)")
+                        referenceImage.name = name
+                        self.selfLandmark[referenceImage.name!] = description
+                        // Do something with the name and description, for example, store them in variables
+                    }
+                }
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                // Add the actions to the alert controller
+                alertController.addAction(okAction)
+                alertController.addAction(cancelAction)
+                
+                // Present the alert controller
+                present(alertController, animated: true, completion: nil)
+//        referenceImage.name = "test"
+//        selfLandmark[referenceImage.name!] = "TEST DECRIPTION"
+        imagesSet.append(referenceImage)
+        configuration.detectionImages = Set(self.imagesSet)
+        self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        self.statusViewController.scheduleMessage("Look around to detect images", inSeconds: 7.5, messageType: .contentPlacement)
+    }
     
 }
