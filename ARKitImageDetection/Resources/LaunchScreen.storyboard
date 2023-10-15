@@ -38,27 +38,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Cc-8k-f4J">
-                                <rect key="frame" x="108" y="320" width="159" height="27"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="ARound WashU">
-                                        <attributes>
-                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="23" name="Kefa-Regular"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="aroundWashu" translatesAutoresizingMaskIntoConstraints="NO" id="tZh-O9-jnE">
+                                <rect key="frame" x="67" y="231" width="240" height="204"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZeT-FE-MCF"/>
-                        <color key="backgroundColor" red="0.64756250380000002" green="0.076770223679999999" blue="0.086689122019999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.5176470876" green="0.1843137443" blue="0.14901961389999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="9Cc-8k-f4J" firstAttribute="leading" secondItem="ZeT-FE-MCF" secondAttribute="leading" constant="108" id="9MV-h5-TOi"/>
-                            <constraint firstItem="ZeT-FE-MCF" firstAttribute="trailing" secondItem="9Cc-8k-f4J" secondAttribute="trailing" constant="108" id="bxZ-5n-DJJ"/>
-                            <constraint firstItem="ZeT-FE-MCF" firstAttribute="bottom" secondItem="9Cc-8k-f4J" secondAttribute="bottom" constant="320" id="p5q-y5-5ay"/>
-                            <constraint firstItem="9Cc-8k-f4J" firstAttribute="top" secondItem="ZeT-FE-MCF" secondAttribute="top" constant="300" id="vj0-6c-WlL"/>
+                            <constraint firstItem="tZh-O9-jnE" firstAttribute="leading" secondItem="ZeT-FE-MCF" secondAttribute="leading" constant="67" id="3JS-K4-48b"/>
+                            <constraint firstItem="ZeT-FE-MCF" firstAttribute="bottom" secondItem="tZh-O9-jnE" secondAttribute="bottom" constant="232" id="cUs-W6-mth"/>
+                            <constraint firstItem="tZh-O9-jnE" firstAttribute="top" secondItem="ZeT-FE-MCF" secondAttribute="top" constant="211" id="j8n-Vx-oiM"/>
+                            <constraint firstItem="ZeT-FE-MCF" firstAttribute="trailing" secondItem="tZh-O9-jnE" secondAttribute="trailing" constant="68" id="uDu-RP-mbI"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -67,4 +57,7 @@
             <point key="canvasLocation" x="9" y="-394"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="aroundWashu" width="994" height="204"/>
+    </resources>
 </document>
