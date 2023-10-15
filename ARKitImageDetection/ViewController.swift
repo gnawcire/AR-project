@@ -19,7 +19,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var blurView: UIVisualEffectView!
     
     @IBOutlet weak var buildingButton: UIButton!
-    @IBOutlet weak var dots: UIImageView!
     
     
     
@@ -46,7 +45,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.delegate = self
         
         buildingButton.isHidden = true
-        dots.isHidden = true
         // Hook up status view controller callback(s).
         statusViewController.restartExperienceHandler = { [unowned self] in
             self.restartExperience()
@@ -90,28 +88,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 print("ERROR getting documents: \(err)")
             } else {
                 DispatchQueue.global().async {
-                    var imagesSet: [ARReferenceImage] = []
-                    for document in querySnapshot!.documents {
-                        print("\(document.documentID) => \(document.data())")
-                        print(document.data()["URL"]!)
-                        let urlstring: String = document.data()["URL"]! as! String
-                        let theURL = URL(string: urlstring)
-                        do {
-                            let imageData = try Data(contentsOf: theURL!)
-                            let image = UIImage(data: imageData)
-                            print("image loaded")
-                            var cgFloat: CGFloat?
-                            if let doubleValue = Double(document.data()["width"] as! String) {
-                                cgFloat = CGFloat(doubleValue)
+                    if configuration.detectionImages.isEmpty {
+                        var imagesSet: [ARReferenceImage] = []
+                        for document in querySnapshot!.documents {
+                            print("\(document.documentID) => \(document.data())")
+                            print(document.data()["URL"]!)
+                            let urlstring: String = document.data()["URL"]! as! String
+                            let theURL = URL(string: urlstring)
+                            do {
+                                let imageData = try Data(contentsOf: theURL!)
+                                let image = UIImage(data: imageData)
+                                print("image loaded")
+                                var cgFloat: CGFloat?
+                                if let doubleValue = Double(document.data()["width"] as! String) {
+                                    cgFloat = CGFloat(doubleValue)
+                                }
+                                let referenceImage = ARReferenceImage((image?.cgImage)!, orientation: .up, physicalWidth: cgFloat!)
+                                referenceImage.name = document.data()["name"] as? String
+                                imagesSet.append(referenceImage)
+                            } catch {
+                                print("ERROR")
                             }
-                            let referenceImage = ARReferenceImage((image?.cgImage)!, orientation: .up, physicalWidth: cgFloat!)
-                            referenceImage.name = document.data()["name"] as? String
-                            imagesSet.append(referenceImage)
-                        } catch {
-                            print("ERROR")
                         }
+                        configuration.detectionImages = Set(imagesSet)
                     }
-                    configuration.detectionImages = Set(imagesSet)
                     self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                     self.statusViewController.scheduleMessage("Look around to detect images", inSeconds: 7.5, messageType: .contentPlacement)
                 }
@@ -176,7 +176,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         buildingButton.isHidden = false
         buildingButton.layer.cornerRadius = buildingButton.frame.size.height / 2
         buildingButton.clipsToBounds = true
-        dots.isHidden = false
 
     }
+    
+    @IBOutlet weak var buildingInfoView: UIView!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBAction func expandBuilding(_ sender: Any) {
+        bottomConstraint.constant = 240
+        
+        UIView.animate(withDuration: 0.5) {
+            self.buildingInfoView.backgroundColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1)
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+    @IBOutlet weak var buildingExpanded: UIView!
+    
 }
